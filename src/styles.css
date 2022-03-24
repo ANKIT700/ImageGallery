@@ -6,6 +6,7 @@
 body {
   margin: 0;
   font-family: "Lato", sans-serif;
+  
 }
 
 .sidebar {
@@ -57,3 +58,31 @@ div.content {
     float: none;
   }
 }
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #212529 #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 13px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #212529;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+  }
+
+  .gallery{
+    padding: 12px;
+    margin-left: 200px;
+    margin-top: -1px;
+  }
