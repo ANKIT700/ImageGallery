@@ -3,15 +3,14 @@ import "./Sidebar.css";
 import { Link } from "react-router-dom";
 
 const categories = [
-  "cars",
-  "backgrounds",
-  "fashion",
+  // "backgrounds",
+  // "fashion",
   "science",
   "nature",
   "education",
   "feelings",
   "health",
-  "people",
+  // "people",
   "places",
   "animals",
   "industry",

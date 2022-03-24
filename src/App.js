@@ -50,18 +50,19 @@ export default function App() {
       });
   }, []);
 
-  const loadFunc = (category, isCategory,resetPageNumber) => {
-    
+  const loadFunc = (category, isCategory, resetPageNumber) => {
     let apiUrl = ``;
-    if(resetPageNumber){
+    if (resetPageNumber) {
       SetPageNumber(1);
     }
     if (isCategory) {
-      apiUrl = `https://pixabay.com/api/?key=11903245-c6f2294b80d77d1fd7402ea4e&category=${category}&image_type=photo&page=${resetPageNumber?1:pageNumber}&per_page=50`;
-      
-
+      apiUrl = `https://pixabay.com/api/?key=11903245-c6f2294b80d77d1fd7402ea4e&category=${category}&image_type=photo&page=${
+        resetPageNumber ? 1 : pageNumber
+      }&per_page=50`;
     } else {
-      apiUrl = `https://pixabay.com/api/?key=11903245-c6f2294b80d77d1fd7402ea4e&q=${searchValue}&image_type=photo&page=${resetPageNumber?1:pageNumber}&per_page=50`;
+      apiUrl = `https://pixabay.com/api/?key=11903245-c6f2294b80d77d1fd7402ea4e&q=${searchValue}&image_type=photo&page=${
+        resetPageNumber ? 1 : pageNumber
+      }&per_page=50`;
     }
     axios
       .get(`${apiUrl}`)
@@ -88,12 +89,10 @@ export default function App() {
           setGalleryData(IMAGES);
         }
         if (galleryData.length < response.data.totalHits) {
-          
-          SetPageNumber( resetPageNumber?1:pageNumber + 1);
+          SetPageNumber(resetPageNumber ? 1 : pageNumber + 1);
           SetHasMore(true);
         }
         let children = [];
-       
       })
       .catch(function (error) {
         // handle error
@@ -146,43 +145,52 @@ export default function App() {
     <div className="App">
       <Router>
         <Navbar />
-        <Sidebar
-          searchHandler={(category) => {
-            loadFunc(category, true,true);
-            setSearchValue(category);
-          }}
-        />
-        {/* <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2> */}
-        <div className=" container w-25 mt-3 text-center text-dark">
-          <InputGroup className="mb-3">
-            <FormControl
-              placeholder="Search Images"
-              aria-label="Search Images"
-              aria-describedby="basic-addon2"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-            <Button
-              variant="outline-secondary"
-              id="button-addon2"
-              onClick={() => loadFunc(searchValue,false,true)}
-            >
-              Search
-            </Button>
-          </InputGroup>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-2 p-0">
+              <Sidebar
+                searchHandler={(category) => {
+                  loadFunc(category, true, true);
+                  setSearchValue(category);
+                }}
+              />
+            </div>
+            <div class="col-10">
+              <div className=" container w-75 mt-3 text-center text-dark">
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="Search Images"
+                    aria-label="Search Images"
+                    aria-describedby="basic-addon2"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                  />
+                  <Button
+                    variant="outline-secondary"
+                    id="button-addon2"
+                    onClick={() => loadFunc(searchValue, false, true)}
+                  >
+                    Search
+                  </Button>
+                </InputGroup>
+              </div>
+
+              <div className="gallery">
+                <InfinitScroll
+                  dataLength={galleryData.length}
+                  next={() => loadFunc(searchValue, false, false)}
+                  hasMore={true}
+                  loader={<h4>Loading ... </h4>}
+                >
+                  <Gallery images={galleryData} />
+                </InfinitScroll>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="gallery">
-          <InfinitScroll
-            dataLength={galleryData.length}
-            next={() => loadFunc(searchValue, false,false)}
-            hasMore={true}
-            loader={<h4>Loading ... </h4>}
-          >
-            <Gallery images={galleryData} />
-          </InfinitScroll>
-        </div>
+        {/* <h1>Hello CodeSandbox</h1>
+      <h2>Start editing to see some magic happen!</h2> */}
       </Router>
     </div>
   );
