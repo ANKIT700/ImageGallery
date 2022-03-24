@@ -50,15 +50,18 @@ export default function App() {
       });
   }, []);
 
-  const loadFunc = (category, isCategory) => {
-    if (isCategory) {
+  const loadFunc = (category, isCategory,resetPageNumber) => {
+    
+    let apiUrl = ``;
+    if(resetPageNumber){
       SetPageNumber(1);
     }
-    let apiUrl = ``;
     if (isCategory) {
-      apiUrl = `https://pixabay.com/api/?key=11903245-c6f2294b80d77d1fd7402ea4e&category=${category}&image_type=photo&page=${pageNumber}&per_page=50`;
+      apiUrl = `https://pixabay.com/api/?key=11903245-c6f2294b80d77d1fd7402ea4e&category=${category}&image_type=photo&page=${resetPageNumber?1:pageNumber}&per_page=50`;
+      
+
     } else {
-      apiUrl = `https://pixabay.com/api/?key=11903245-c6f2294b80d77d1fd7402ea4e&q=${searchValue}&image_type=photo&page=${pageNumber}&per_page=50`;
+      apiUrl = `https://pixabay.com/api/?key=11903245-c6f2294b80d77d1fd7402ea4e&q=${searchValue}&image_type=photo&page=${resetPageNumber?1:pageNumber}&per_page=50`;
     }
     axios
       .get(`${apiUrl}`)
@@ -78,17 +81,19 @@ export default function App() {
           };
           IMAGES.push(imageData);
         });
-        if (galleryData.length < response.data.totalHits) {
-          SetPageNumber(pageNumber + 1);
-          SetHasMore(true);
-        }
-        let children = [];
-        if (!isCategory) {
+        if (!resetPageNumber) {
           children = galleryData.concat(IMAGES);
           setGalleryData(children);
         } else {
           setGalleryData(IMAGES);
         }
+        if (galleryData.length < response.data.totalHits) {
+          
+          SetPageNumber( resetPageNumber?1:pageNumber + 1);
+          SetHasMore(true);
+        }
+        let children = [];
+       
       })
       .catch(function (error) {
         // handle error
@@ -143,7 +148,7 @@ export default function App() {
         <Navbar />
         <Sidebar
           searchHandler={(category) => {
-            loadFunc(category, true);
+            loadFunc(category, true,true);
             setSearchValue(category);
           }}
         />
@@ -161,7 +166,7 @@ export default function App() {
             <Button
               variant="outline-secondary"
               id="button-addon2"
-              onClick={() => loadFunc(true)}
+              onClick={() => loadFunc(searchValue,false,true)}
             >
               Search
             </Button>
@@ -171,7 +176,7 @@ export default function App() {
         <div className="gallery">
           <InfinitScroll
             dataLength={galleryData.length}
-            next={() => loadFunc(searchValue, false)}
+            next={() => loadFunc(searchValue, false,false)}
             hasMore={true}
             loader={<h4>Loading ... </h4>}
           >
