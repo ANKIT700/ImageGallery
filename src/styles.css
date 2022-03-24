@@ -83,6 +83,7 @@ div.content {
 
   .gallery{
     padding: 12px;
-    margin-left: 200px;
+    /* margin-left: 200px; */
     margin-top: -1px;
+    display: table-cell;
   }
